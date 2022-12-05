@@ -125,6 +125,29 @@ if __name__ == '__main__':
     # Exporting the data
     #TODO Have to get the three Diagrams Values in a dataframe
 
+    # Exporting data
+    # Combining feret and circ.
+    feret_circ_df1.columns = (feret_circ_df1.columns.str.replace('MinFeret', 'MinFeret_df1').str.replace('Circ.', 'Circ_df1'))
+    feret_circ_df2.columns = (feret_circ_df2.columns.str.replace('MinFeret', 'MinFeret_df2').str.replace('Circ.', 'Circ_df2'))
+    feret_circ_df3.columns = (feret_circ_df3.columns.str.replace('MinFeret', 'MinFeret_df3').str.replace('Circ.', 'Circ_df3'))
+    feret_circ_combined = pd.concat([feret_circ_df1, feret_circ_df2, feret_circ_df3], axis=1)
+
+    # Start exporting
+    feret_circ_combined.to_csv(r'/Users/riad_rustum/Desktop/feret_circ_combined.csv',
+                               encoding='UTF-8',
+                               sep=";",
+                               decimal=',',
+                               index=False)
+
+    new_dataframe.to_csv(r'/Users/riad_rustum/Desktop/new_dataframe.csv',
+                         encoding='UTF-8',
+                         sep=";",
+                         decimal=',',
+                         index=False)
+
+
+
+
 
 
 
