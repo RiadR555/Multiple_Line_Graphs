@@ -19,15 +19,7 @@ if __name__ == '__main__':
     feret_circ_df3 = df3.loc[:, ('MinFeret', 'Circ.')]
 
     # creating zero rows
-    zero_list = []
-    for i in range(1, (feret_circ_df1.shape[1] + 1)):
-        i = 0
-        zero_list.append(i)
-    print(zero_list)
 
-    feret_circ_df1.loc[0] = zero_list
-    feret_circ_df2.loc[0] = zero_list
-    feret_circ_df3.loc[0] = zero_list
 
     # creating the count column
     column_values_df1 = []
@@ -65,6 +57,35 @@ if __name__ == '__main__':
     feret_circ_df3["MinFeret"] = feret_circ_df3["MinFeret"].str.replace(",", ".").astype(float)
     feret_circ_df3["Circ."] = feret_circ_df3["Circ."].str.replace(",", ".").astype(float)
 
+    zero_list = []
+    for i in range(1, (feret_circ_df1.shape[1] + 1)):
+        i = 0
+        zero_list.append(i)
+    print(zero_list)
+
+    feret_circ_df1.loc[0] = zero_list
+    feret_circ_df2.loc[0] = zero_list
+    feret_circ_df3.loc[0] = zero_list
+
+    # Calculating the medium from teh dataframe
+    list = [(i / 100) for i in range(101)]
+    print(list)
+
+    y_werte_df1 = np.interp(list, feret_circ_df1["procent"], feret_circ_df1["MinFeret"])
+    y_werte_df2 = np.interp(list, feret_circ_df2["procent"], feret_circ_df2["MinFeret"])
+    y_werte_df3 = np.interp(list, feret_circ_df3["procent"], feret_circ_df3["MinFeret"])
+
+    # Creating new Dataframe
+    data = {'procent': list,
+            'Diagram1': y_werte_df1,
+            'Diagram2': y_werte_df2,
+            'Diagram3': y_werte_df3}
+
+    new_dataframe = pd.DataFrame(data)
+
+    # doing the calculation
+    new_dataframe["Mittelwert"] = (new_dataframe["Diagram1"] + new_dataframe["Diagram2"] + new_dataframe["Diagram3"]) / 3
+
     # And finally plotting the data
 
     # make an own Diagramm
@@ -73,6 +94,7 @@ if __name__ == '__main__':
     ax.plot(feret_circ_df1["MinFeret"], feret_circ_df1["procent"])
     ax.plot(feret_circ_df2["MinFeret"], feret_circ_df2["procent"])
     ax.plot(feret_circ_df3["MinFeret"], feret_circ_df3["procent"])
+    ax.plot(new_dataframe["Mittelwert"], new_dataframe["procent"])
     # Setting to start with 0
     ax.set_ylim(ymin=0)
     ax.set_xlim(xmin=0)
@@ -93,12 +115,16 @@ if __name__ == '__main__':
     # ax.yaxis.grid(True)
 
     # setting texts
-    ax.legend(['15', '16', '14'])
+    ax.legend(['15', '16', '14', 'Mittelwert'])
     ax.xaxis.set_label_text('Partikelgröße χ in mm')
     ax.yaxis.set_label_text('Summenverteilung Q₁ in %')
 
     # show the Diagram
     plt.show()
+
+    # Exporting the data
+    #TODO Have to get the three Diagrams Values in a dataframe
+
 
 
 
